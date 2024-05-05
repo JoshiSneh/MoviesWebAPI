@@ -2,7 +2,8 @@ from flask import Flask, jsonify, request
 from flask.views import MethodView
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from models import db
-from models import Collection, Movie
+from models.collections import Collection
+from models.movies import Movie
 
 
 

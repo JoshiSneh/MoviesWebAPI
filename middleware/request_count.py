@@ -1,4 +1,4 @@
-from models import RequestCount
+from models.counter import RequestCount
 from models import db
 
 
