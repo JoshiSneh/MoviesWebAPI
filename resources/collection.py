@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from flask.views import MethodView
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models import db
+from db import db
 from models.collections import Collection
 from models.movies import Movie
 
@@ -33,16 +33,25 @@ class CollectionAPI(MethodView):
             }
 
         '''
-
         try:
             data = request.get_json()
+
+            if not ("title" in data):
+                return jsonify({"message":"title is required"}), 404
+
+            if not ("description" in data):
+                return jsonify({"message":"description is required"}), 404
+            
+            if not ("movies" in data):
+                return jsonify({"message":"movies are required"}), 404
+
             title = data["title"]
             description = data["description"]
             movies = data["movies"]
             
             if not (title and description and movies):
-                raise ValueError("Username and Password are required")
-
+                return jsonify({"message":"title, description and movies are required"}), 404
+            
             user_name = get_jwt_identity()
             print(user_name)
 
@@ -99,7 +108,7 @@ class CollectionAPI(MethodView):
             collections = Collection.query.filter_by(username=user_name).all()
 
             if not collections:
-                raise ValueError("No collections found for the user!")
+                return jsonify({"message":"no collections found for the user!"}), 404
 
             collection_data = []
             favorite_genres = []
@@ -129,14 +138,15 @@ class CollectionAPI(MethodView):
                         map_list[indi_fav_gen]=1
 
             sorted_fav_genere = sorted(map_list.items(), key=lambda item: item[1], reverse=True)[:3]
-            print(sorted_fav_genere)
+            
+            fav_top_3_genere = [genre[0] for genre in sorted_fav_genere]
 
 
             response_data = {
                 'is_success': True,
                 'data': {
                     'collections': collection_data,
-                    'favorite_genres': sorted_fav_genere
+                    'favorite_genres': fav_top_3_genere
                 }
             }
             return jsonify(response_data), 200
@@ -160,7 +170,7 @@ class CollectionByUUIDAPI(MethodView):
             get_collection = Collection.query.filter_by(uuid=uuid).first()
 
             if not get_collection:
-                raise ValueError("No collection exist with the given uuid")
+                return jsonify({"message":"no collection exist with the given uuid"}), 404
             
             '''Creating the collection data'''
             collection_data = {
@@ -206,7 +216,7 @@ class CollectionByUUIDAPI(MethodView):
             get_collection = Collection.query.filter_by(uuid=uuid).first()
             
             if not get_collection:
-                raise ValueError("No collection exist with the given uuid")
+                 return jsonify({"message":"no collection exist with the given uuid"}), 404
             
             '''Checking for the title in the input json'''
             if "title" in data:
@@ -256,7 +266,7 @@ class CollectionByUUIDAPI(MethodView):
                 db.session.commit()
                 return jsonify({'message': 'collection deleted successfully'}), 200
             else:
-                raise ValueError("No collection exist with the given uuid")
+                 return jsonify({"message":"no collection exist with the given uuid"}), 404
         except Exception as e:
             return jsonify({'error':e})
 

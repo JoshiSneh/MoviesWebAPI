@@ -1,5 +1,5 @@
 from models.counter import RequestCount
-from models import db
+from db import db
 
 
 '''Middleware for counting all the requests'''

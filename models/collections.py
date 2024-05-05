@@ -1,7 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 import uuid
-
-db = SQLAlchemy()
+from db import db
 
 '''Model for Collection'''
 

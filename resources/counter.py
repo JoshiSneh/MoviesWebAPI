@@ -1,7 +1,7 @@
 from flask import jsonify
 from flask.views import MethodView
 from flask_jwt_extended import jwt_required
-from models import  db
+from db import db
 from models.counter import RequestCount
 
 class RequestCountAPI(MethodView):

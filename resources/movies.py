@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import jsonify
 from flask.views import MethodView
 import requests
 from requests.auth import HTTPBasicAuth

@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_jwt_extended import JWTManager
-from models import db
+from db import db
 
 from resources.collection import CollectionAPI,CollectionByUUIDAPI
 from resources.counter import RequestCountAPI, ResetRequestCountAPI

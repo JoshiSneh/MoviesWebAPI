@@ -1,7 +1,7 @@
 from flask import jsonify, request
 from flask.views import MethodView
 from flask_jwt_extended import create_access_token
-from models import db
+from db import db
 from models.user import User
 
 
